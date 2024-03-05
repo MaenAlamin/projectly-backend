@@ -1,17 +1,17 @@
 require("dotenv").config();
 
 const express = require("express");
-// const cors = require("cors");
+const cors = require("cors");
 
 const app = express();
 
 app.use(express.json());
-// app.use(
-//   cors({
-//     origin: "http://localhost:3000",
-//     credentials: true,
-//   })
-// );
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
 
 const usersRoutes = require("./routes/users");
 app.use("/users", usersRoutes);
@@ -25,6 +25,6 @@ app.use("/projects", projectsRoutes);
 const tasksRoutes = require("./routes/tasks");
 app.use("/tasks", tasksRoutes);
 
-app.listen(3005, () => {
+app.listen(4000, () => {
   console.log("server started");
 });
