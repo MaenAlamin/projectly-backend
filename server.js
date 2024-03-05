@@ -25,6 +25,6 @@ app.use("/projects", projectsRoutes);
 const tasksRoutes = require("./routes/tasks");
 app.use("/tasks", tasksRoutes);
 
-app.listen(4000, () => {
+app.listen(10000, () => {
   console.log("server started");
 });
