@@ -10,6 +10,7 @@ router.get("/", async (req, res) => {
     const roles = await prisma.role.findMany(); // Fetch all roles from the database
     res.json(roles); // Send the fetched roles as a JSON response
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Error fetching roles" }); // Send an error response if something goes wrong
   }
 });
@@ -27,6 +28,7 @@ router.get("/:id", async (req, res) => {
       res.status(404).json({ error: "Role not found" }); // Send an error response if no role is found
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Error fetching roles" }); // Send an error response if something goes wrong
   }
 });
@@ -38,6 +40,7 @@ router.post("/", async (req, res) => {
     const newRole = await prisma.role.create({ data: roleData }); // Create a new role in the database with the provided data
     res.json(newRole); // Send the created role as a JSON response
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Error creating role" }); // Send an error response if something goes wrong
   }
 });
@@ -53,6 +56,7 @@ router.patch("/:id", async (req, res) => {
     }); // Update the role in the database with the provided updates
     res.json(updatedRole); // Send the updated role as a JSON response
   } catch (error) {
+    console.log(error);
     if (error.code === "P2025") {
       res.status(404).json({ error: "Role not found" }); // Send an error response if no role is found
     } else {
@@ -68,6 +72,7 @@ router.delete("/:id", async (req, res) => {
     const deletedRole = await prisma.role.delete({ where: { id } }); // Delete the role from the database
     res.json(deletedRole); // Send the deleted role as a JSON response
   } catch (error) {
+    console.log(error);
     if (error.code === "P2025") {
       res.status(404).json({ error: "Role not found" }); // Send an error response if no role is found
     } else {

@@ -10,6 +10,7 @@ router.get("/", async (req, res) => {
     const projects = await prisma.project.findMany(); // Fetch all projects from the database
     res.json(projects); // Send the fetched projects as a JSON response
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Error fetching projects" }); // Send an error response if something goes wrong
   }
 });
@@ -27,6 +28,7 @@ router.get("/:id", async (req, res) => {
       res.status(404).json({ error: "Project not found" }); // Send an error response if no project is found
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Error fetching projects" }); // Send an error response if something goes wrong
   }
 });
@@ -38,6 +40,7 @@ router.post("/", async (req, res) => {
     const newProject = await prisma.project.create({ data: projectData }); // Create a new project in the database with the provided data
     res.json(newProject); // Send the created project as a JSON response
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Error creating project" }); // Send an error response if something goes wrong
   }
 });
@@ -53,6 +56,7 @@ router.patch("/:id", async (req, res) => {
     }); // Update the project in the database with the provided updates
     res.json(updatedProject); // Send the updated project as a JSON response
   } catch (error) {
+    console.log(error);
     if (error.code === "P2025") {
       res.status(404).json({ error: "Project not found" }); // Send an error response if no project is found
     } else {
@@ -68,6 +72,7 @@ router.delete("/:id", async (req, res) => {
     const deletedProject = await prisma.project.delete({ where: { id } }); // Delete the project from the database
     res.json(deletedProject); // Send the deleted project as a JSON response
   } catch (error) {
+    console.log(error);
     if (error.code === "P2025") {
       res.status(404).json({ error: "Project not found" }); // Send an error response if no project is found
     } else {

@@ -10,6 +10,7 @@ router.get("/", async (req, res) => {
     const users = await prisma.user.findMany(); // Fetch all users from the database
     res.json(users); // Send the fetched users as a JSON response
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Error fetching users" }); // Send an error response if something goes wrong
   }
 });
@@ -25,6 +26,7 @@ router.get("/:id", async (req, res) => {
       res.status(404).json({ error: "User not found" }); // Send an error response if no user is found
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Error fetching users" }); // Send an error response if something goes wrong
   }
 });
@@ -40,6 +42,7 @@ router.get("/:email", async (req, res) => {
       res.status(404).json({ error: "User not found" }); // Send an error response if no user is found
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Error fetching users" }); // Send an error response if something goes wrong
   }
 });
@@ -59,6 +62,7 @@ router.post("/", async (req, res) => {
     const newUser = await prisma.user.create({ data: userData }); // Create a new user in the database with the provided data
     res.json(newUser); // Send the created user as a JSON response
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Error creating user" }); // Send an error response if something goes wrong
   }
 });
@@ -74,6 +78,7 @@ router.patch("/:id", async (req, res) => {
     }); // Update the user in the database with the provided updates
     res.json(updatedUser); // Send the updated user as a JSON response
   } catch (error) {
+    console.log(error);
     if (error.code === "P2025") {
       res.status(404).json({ error: "User not found" }); // Send an error response if no user is found
     } else {
@@ -89,6 +94,7 @@ router.delete("/:id", async (req, res) => {
     const deletedUser = await prisma.user.delete({ where: { id } }); // Delete the user from the database
     res.json(deletedUser); // Send the deleted user as a JSON response
   } catch (error) {
+    console.log(error);
     if (error.code === "P2025") {
       res.status(404).json({ error: "User not found" }); // Send an error response if no user is found
     } else {

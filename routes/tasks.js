@@ -10,6 +10,7 @@ router.get("/", async (req, res) => {
     const tasks = await prisma.task.findMany(); // Fetch all tasks from the database
     res.json(tasks); // Send the fetched tasks as a JSON response
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Error fetching tasks" }); // Send an error response if something goes wrong
   }
 });
@@ -25,6 +26,7 @@ router.get("/:id", async (req, res) => {
       res.status(404).json({ error: "Task not found" }); // Send an error response if no task is found
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Error fetching tasks" }); // Send an error response if something goes wrong
   }
 });
@@ -36,6 +38,7 @@ router.post("/", async (req, res) => {
     const newTask = await prisma.task.create({ data: taskData }); // Create a new task in the database with the provided data
     res.json(newTask); // Send the created task as a JSON response
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Error creating task" }); // Send an error response if something goes wrong
   }
 });
@@ -51,6 +54,7 @@ router.patch("/:id", async (req, res) => {
     }); // Update the task in the database with the provided updates
     res.json(updatedTask); // Send the updated task as a JSON response
   } catch (error) {
+    console.log(error);
     if (error.code === "P2025") {
       res.status(404).json({ error: "Task not found" }); // Send an error response if no task is found
     } else {
@@ -66,6 +70,7 @@ router.delete("/:id", async (req, res) => {
     const deletedTask = await prisma.task.delete({ where: { id } }); // Delete the task from the database
     res.json(deletedTask); // Send the deleted task as a JSON response
   } catch (error) {
+    console.log(error);
     if (error.code === "P2025") {
       res.status(404).json({ error: "Task not found" }); // Send an error response if no task is found
     } else {
