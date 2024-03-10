@@ -1,6 +1,6 @@
 const express = require("express");
-const { PrismaClient } = require("@prisma/client"); // Import Prisma Client
-const prisma = new PrismaClient(); // Instantiate Prisma Client
+
+const prisma = require("../client"); //import prisma client Instance
 
 const router = express.Router();
 
