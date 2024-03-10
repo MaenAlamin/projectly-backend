@@ -90,7 +90,7 @@ model Task {
   priority   Int
   status     TaskStatus
   createdAt  DateTime   @default(now())
-  FinishedAt DateTime
+  FinishedAt DateTime?
   user       User       @relation(fields: [userId], references: [id])
   userId     String
   project    Project    @relation(fields: [projectId], references: [id])
