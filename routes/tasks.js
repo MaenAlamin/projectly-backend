@@ -7,7 +7,9 @@ const router = express.Router();
 //getting all tasks
 router.get("/", async (req, res) => {
   try {
-    const tasks = await prisma.task.findMany(); // Fetch all tasks from the database
+    const tasks = await prisma.task.findMany({
+      include: { user: true, project: true },
+    }); // Fetch all tasks from the database
     res.json(tasks); // Send the fetched tasks as a JSON response
   } catch (error) {
     console.log(error);
@@ -19,7 +21,10 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const taskId = req.params.id; // Get the task ID from the request parameters
-    const task = await prisma.task.findUnique({ where: { id: taskId } }); // Fetch all tasks from the database
+    const task = await prisma.task.findUnique({
+      where: { id: taskId },
+      include: { user: true, project: true },
+    }); // Fetch all tasks from the database
     if (task) {
       res.json(task); // Send the fetched task as a JSON response
     } else {

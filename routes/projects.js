@@ -7,7 +7,11 @@ const router = express.Router();
 //getting all projects
 router.get("/", async (req, res) => {
   try {
-    const projects = await prisma.project.findMany(); // Fetch all projects from the database
+    const projects = await prisma.project.findMany({
+      include: {
+        tasks: true,
+      },
+    }); // Fetch all projects from the database
     res.json(projects); // Send the fetched projects as a JSON response
   } catch (error) {
     console.log(error);
@@ -21,6 +25,9 @@ router.get("/:id", async (req, res) => {
     const projectId = req.params.id; // Get the project ID from the request parameters
     const project = await prisma.project.findUnique({
       where: { id: projectId },
+      include: {
+        tasks: true,
+      },
     }); // Fetch all projects from the database
     if (project) {
       res.json(project); // Send the fetched project as a JSON response

@@ -7,7 +7,9 @@ const router = express.Router();
 //getting all users
 router.get("/", async (req, res) => {
   try {
-    const users = await prisma.user.findMany(); // Fetch all users from the database
+    const users = await prisma.user.findMany({
+      include: { role: true, tasks: true },
+    }); // Fetch all users from the database
     res.json(users); // Send the fetched users as a JSON response
   } catch (error) {
     console.log(error);
@@ -19,7 +21,10 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const userId = req.params.id; // Get the user ID from the request parameters
-    const user = await prisma.user.findUnique({ where: { id: userId } }); // Fetch all users from the database
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      include: { role: true, tasks: true },
+    }); // Fetch all users from the database
     if (user) {
       res.json(user); // Send the fetched user as a JSON response
     } else {
@@ -35,7 +40,10 @@ router.get("/:id", async (req, res) => {
 router.get("/:email", async (req, res) => {
   try {
     const userEmail = req.params.email; // Get the user email from the request parameters
-    const user = await prisma.user.findUnique({ where: { email: userEmail } }); // Fetch all users from the database
+    const user = await prisma.user.findUnique({
+      where: { email: userEmail },
+      include: { role: true },
+    }); // Fetch all users from the database
     if (user) {
       res.json(user); // Send the fetched user as a JSON response
     } else {
