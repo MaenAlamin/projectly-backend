@@ -71,9 +71,9 @@ model Role {
 }
 
 model Project {
-  id          String @id @default(cuid())
+  id          String  @id @default(cuid())
   name        String
-  description String
+  description String?
   users       User[]
   tasks       Task[]
 }
@@ -87,11 +87,10 @@ enum TaskStatus {
 model Task {
   id         String     @id @default(cuid())
   name       String
-  priority   Int
   status     TaskStatus
   createdAt  DateTime   @default(now())
   FinishedAt DateTime?
-  user       User       @relation(fields: [userId], references: [id])
+  user       User?      @relation(fields: [userId], references: [id])
   userId     String
   project    Project    @relation(fields: [projectId], references: [id])
   projectId  String
