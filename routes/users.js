@@ -1,14 +1,14 @@
 const express = require("express");
-
 const prisma = require("../client"); //import prisma client Instance
-
 const router = express.Router();
+
+const bcrypt = require("bcryptjs");
 
 //getting all users
 router.get("/", async (req, res) => {
   try {
     const users = await prisma.user.findMany({
-      include: { role: true, tasks: true },
+      include: { tasks: true },
     }); // Fetch all users from the database
     res.json(users); // Send the fetched users as a JSON response
   } catch (error) {
@@ -23,7 +23,7 @@ router.get("/:id", async (req, res) => {
     const userId = req.params.id; // Get the user ID from the request parameters
     const user = await prisma.user.findUnique({
       where: { id: userId },
-      include: { role: true, tasks: true },
+      include: { tasks: true },
     }); // Fetch all users from the database
     if (user) {
       res.json(user); // Send the fetched user as a JSON response
@@ -42,7 +42,6 @@ router.get("/:email", async (req, res) => {
     const userEmail = req.params.email; // Get the user email from the request parameters
     const user = await prisma.user.findUnique({
       where: { email: userEmail },
-      include: { role: true },
     }); // Fetch all users from the database
     if (user) {
       res.json(user); // Send the fetched user as a JSON response
@@ -55,23 +54,33 @@ router.get("/:email", async (req, res) => {
   }
 });
 
-//creating a user
+//create a user with password
 router.post("/", async (req, res) => {
-  const userData = req.body; // Get the user data from the request body
   try {
-    if (!userData.roleId) {
-      const defaultRole = await prisma.role.findFirst({
-        where: { id: "clsoss3l00000q0udjipni7si" },
-      });
-      if (defaultRole) {
-        userData.roleId = defaultRole.id;
-      }
-    }
-    const newUser = await prisma.user.create({ data: userData }); // Create a new user in the database with the provided data
-    res.json(newUser); // Send the created user as a JSON response
+    // Extract user data from request body
+    const { name, password, email, role } = req.body;
+
+    // Hash the password
+    const salt = await bcrypt.genSalt(10); // Generate a salt
+    const hashedPassword = await bcrypt.hash(password, salt); // Hash the password with the salt
+
+    // Create a new user with the hashed password
+    const newUser = await prisma.user.create({
+      data: {
+        name: name,
+        email: email,
+        password: hashedPassword,
+        role: role || "Employee", // Use provided role or use a default role (Employee)
+        // Include other necessary fields
+      },
+    });
+    // Save the user to the database
+    res
+      .status(201)
+      .json({ message: "User registered successfully", user: newUser });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Error creating user" }); // Send an error response if something goes wrong
+    console.error(error);
+    res.status(500).json({ message: "Error registering user", error });
   }
 });
 

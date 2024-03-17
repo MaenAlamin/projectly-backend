@@ -17,6 +17,21 @@ router.get("/", async (req, res) => {
   }
 });
 
+//getting all tasks for a project
+router.get("/:projectId", async (req, res) => {
+  const projectId = req.params.projectId; // Get the task ID from the request parameters
+  try {
+    const tasks = await prisma.task.findMany({
+      where: { projectId: projectId },
+      include: { user: true, project: true },
+    }); // Fetch all tasks from the database
+    res.json(tasks); // Send the fetched tasks as a JSON response
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Error fetching tasks" }); // Send an error response if something goes wrong
+  }
+});
+
 //getting a task by id
 router.get("/:id", async (req, res) => {
   try {

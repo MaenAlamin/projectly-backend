@@ -14,16 +14,18 @@ app.use(
 );
 
 const usersRoutes = require("./routes/users");
-app.use("/users", usersRoutes);
-
-const rolesRoutes = require("./routes/roles");
-app.use("/roles", rolesRoutes);
-
 const projectsRoutes = require("./routes/projects");
-app.use("/projects", projectsRoutes);
-
 const tasksRoutes = require("./routes/tasks");
+const commentsRoutes = require("./routes/comments");
+const notificationsRoutes = require("./routes/notifications");
+const validateRoute = require("./routes/validate");
+
+app.use("/users", usersRoutes);
+app.use("/projects", projectsRoutes);
 app.use("/tasks", tasksRoutes);
+app.use("/comments", commentsRoutes);
+app.use("/notifications", notificationsRoutes);
+app.use("/validate", validateRoute);
 
 app.listen(10000, () => {
   console.log("server started");
